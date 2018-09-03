@@ -8,6 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +19,31 @@ public class ReactiveSpringIntroApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReactiveSpringIntroApplication.class, args);
+	}
+
+	@RestController
+	public class JavaMeetupController {
+		private final JavaMeetupService service;
+
+		public JavaMeetupController(
+				JavaMeetupService service) {
+			this.service = service;
+		}
+
+		@GetMapping("devs")
+		public Flux<JavaDev> getDevs() {
+			return service.developers();
+		}
+
+		@GetMapping("devs/{id}")
+		public Mono<JavaDev> getDev(@PathVariable("id") String id) {
+			return service.byId(id);
+		}
+
+		@GetMapping("devs/{id}/consumption")
+		public Flux<Consumption> getConsumption(@PathVariable("id") String id) {
+			return service.consumptionForDev(id);
+		}
 	}
 
 	@Service
