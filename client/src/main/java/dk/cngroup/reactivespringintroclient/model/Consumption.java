@@ -1,19 +1,10 @@
-package dk.cngroup.reactivespringintro.model;
-
-import static dk.cngroup.reactivespringintro.ReactiveSpringIntroApplication.randomId;
+package dk.cngroup.reactivespringintroclient.model;
 
 public class Consumption {
 
   private String id;
   private Substance substance;
   private String javaDev;
-
-  public Consumption(Substance substance,
-      String javaDevId) {
-    this.id = randomId();
-    this.substance = substance;
-    this.javaDev = javaDevId;
-  }
 
   public String getId() {
     return id;

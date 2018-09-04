@@ -3,6 +3,7 @@ package dk.cngroup.reactivespringintro.controller;
 import dk.cngroup.reactivespringintro.model.Consumption;
 import dk.cngroup.reactivespringintro.model.JavaDev;
 import dk.cngroup.reactivespringintro.service.JavaMeetupService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +30,9 @@ public class JavaMeetupController {
     return service.byId(id);
   }
 
-  @GetMapping("devs/{id}/consumption")
+  @GetMapping(path = "devs/{id}/consumption", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public Flux<Consumption> getConsumption(@PathVariable("id") String id) {
-    return service.consumptionForDev(id);
+    return service.byId(id)
+        .flatMapMany(service::consumptionForDev);
   }
 }

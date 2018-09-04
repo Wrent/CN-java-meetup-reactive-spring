@@ -20,9 +20,10 @@ public class JavaMeetupService {
     this.repository = repository;
   }
 
-  public Flux<Consumption> consumptionForDev(String id) {
-    return Flux.interval(Duration.ofSeconds(1))
-        .map(second -> new Consumption(Substance.random(), id));
+  public Flux<Consumption> consumptionForDev(JavaDev dev) {
+    return
+        Flux.interval(Duration.ofSeconds(1))
+        .map(second -> new Consumption(Substance.random(), dev.getName()));
   }
 
   public Mono<JavaDev> byId(String id) {
