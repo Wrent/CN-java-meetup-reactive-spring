@@ -2,6 +2,7 @@ package dk.cngroup.reactivespringintro;
 
 import dk.cngroup.reactivespringintro.model.JavaDev;
 import dk.cngroup.reactivespringintro.repository.JavaMeetupRepository;
+import java.util.stream.Stream;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -18,15 +19,11 @@ public class DataInitializer {
 
   @EventListener(ApplicationReadyEvent.class)
   public void run(ApplicationReadyEvent evt) {
-    System.out.println("started");
-
     this.repository
         .deleteAll()
-        .thenMany(
-            Flux
-                .just("Adam", "Dominik", "Martin", "Jirka")
-                .map(name -> this.repository.save(new JavaDev(name)))
-        ).subscribe(System.out::println, null,
-        () -> this.repository.findAll().subscribe(System.out::println));
+        .subscribe(null, null, () ->
+            Stream.of("Adam", "Dominik", "Martin", "Jirka")
+            .map(JavaDev::new)
+            .forEach(dev -> repository.save(dev).subscribe(System.out::println)));
   }
 }
